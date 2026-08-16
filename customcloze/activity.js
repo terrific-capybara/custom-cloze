@@ -63,6 +63,13 @@ async function renderIdle() {
     catSelect.style.display  = "";
     startBtn.style.display   = "";
     noWordsMsg.style.display = "none";
+    
+    // Add "All Categories" option
+    const allOpt = document.createElement("option");
+    allOpt.value = "ALL";
+    allOpt.textContent = "All Categories";
+    catSelect.appendChild(allOpt);
+    
     for (const cat of categories) {
       const opt = document.createElement("option");
       opt.value = cat;
@@ -84,7 +91,9 @@ async function startSession(gramCat) {
   }
   if (!gramCat) return;
 
-  const result = await selectSentences(gramCat);
+  // Convert "ALL" to null so selectSentences retrieves all words
+  const selectedCat = gramCat === "ALL" ? null : gramCat;
+  const result = await selectSentences(selectedCat);
 
   if (!result) {
     document.getElementById("no-words-msg").style.display = "block";
